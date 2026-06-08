@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love You Heart</title>
+    <style>
+        /* Mengatur latar belakang hitam pekat khas video */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 800px; /* Efek 3D */
+        }
+
+        /* Wadah utama untuk animasi berputar */
+        #ui {
+            position: relative;
+            width: 0;
+            height: 0;
+            transform-style: preserve-3d;
+            animation: rotasiHati 15s infinite linear;
+        }
+
+        @keyframes rotasiHati {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        /* Style pembungkus teks (berdasarkan potongan kode video kamu) */
+        #ui .love_horizontal {
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: horizontal 10000ms infinite alternate ease-in-out;
+            animation-delay: calc(var(--i) * -300ms);
+        }
+
+        /* Style teks tulisan "I love you" pink neon */
+        #ui .love_word {
+            position: absolute;
+            color: #ea80b0; /* Warna pink sesuai screenshot */
+            font-size: 1.1rem; /* Ukuran pas untuk layar HP */
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            text-shadow: 0 0 8px #fff; /* Efek glowing putih */
+            letter-spacing: 1px;
+            white-space: nowrap;
+            transform: translateY(-100%) rotateZ(-30deg);
+        }
+
+        @keyframes horizontal {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui"></div>
+
+    <script>
+        const ui = document.getElementById('ui');
+        const jumlahKata = 60; // Jumlah baris tulisan untuk membentuk hati
+
+        for (let i = 0; i < jumlahKata; i++) {
+            const angle = (i / jumlahKata) * Math.PI * 2;
+            
+            // Rumus matematika kurva hati (Heart Curve)
+            const x = 16 * Math.pow(Math.sin(angle), 3);
+            const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+
+            // Skala ukuran hati (diturunkan sedikit agar pas di layar HP yang vertikal)
+            const skala = 11; 
+
+            // Membuat element wrapper baris teks
+            const horizontalDiv = document.createElement('div');
+            horizontalDiv.classList.add('love_horizontal');
+            horizontalDiv.style.setProperty('--i', i); // Mengirim index ke CSS
+            
+            // Mengatur posisi tiap teks di ruang 3D membentuk hati
+            horizontalDiv.style.transform = `translate3d(${x * skala}px, ${y * skala}px, ${Math.sin(angle) * 5}px) rotateY(${angle}rad)`;
+
+            // Membuat element tulisan "I love you"
+            const wordDiv = document.createElement('div');
+            wordDiv.classList.add('love_word');
+            wordDiv.innerText = 'I love you';
+
+            // Gabungkan kode
+            horizontalDiv.appendChild(wordDiv);
+            ui.appendChild(horizontalDiv);
+        }
+    </script>
+</body>
+</html>
